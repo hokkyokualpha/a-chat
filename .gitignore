@@ -49,3 +49,5 @@ prisma/dev.db-journal
 
 # Claude Code
 .claude/
+
+/src/generated/prisma

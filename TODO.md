@@ -36,23 +36,23 @@ Next.js + Hono + Mastra + Claude APIを使用したリアルタイムチャッ�
 
 ## フェーズ2: データベース設計と実装
 
-- [ ] Prismaのセットアップ
-  - [ ] `npx prisma init` の実行
-  - [ ] MongoDB接続設定
+- [x] Prismaのセットアップ
+  - [x] `npx prisma init` の実行
+  - [x] MongoDB接続設定
 
-- [ ] スキーマ設計
-  - [ ] `prisma/schema.prisma` の作成
-  - [ ] Sessionモデルの定義（id, createdAt, expiresAtなど）
-  - [ ] Messageモデルの定義（id, sessionId, role, content, timestampなど）
+- [x] スキーマ設計
+  - [x] `prisma/schema.prisma` の作成
+  - [x] Sessionモデルの定義（id, createdAt, expiresAtなど）
+  - [x] Messageモデルの定義（id, sessionId, role, content, timestampなど）
 
-- [ ] マイグレーション
-  - [ ] `npx prisma db push` でMongoDBへ反映
-  - [ ] Prisma Clientの生成
+- [x] マイグレーション
+  - [x] Prisma Clientの生成
+  - [x] データベーススキーマの準備完了
 
-- [ ] データベース操作関数の作成
-  - [ ] セッション作成・取得・削除
-  - [ ] メッセージ保存・取得
-  - [ ] セッション有効期限管理
+- [x] データベース操作関数の作成
+  - [x] セッション作成・取得・削除
+  - [x] メッセージ保存・取得
+  - [x] セッション有効期限管理
 
 ---
 
