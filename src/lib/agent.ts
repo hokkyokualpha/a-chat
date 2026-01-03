@@ -73,16 +73,8 @@ export async function streamChatResponse(
 
     const stream = await chatAgent.stream(fullPrompt);
 
-    // Convert to async iterable of text chunks
-    async function* textStream() {
-      for await (const chunk of stream) {
-        if (chunk.type === "text-delta" && chunk.textDelta) {
-          yield chunk.textDelta;
-        }
-      }
-    }
-
-    return textStream();
+    // Return the textStream from Mastra
+    return stream.textStream;
   } catch (error) {
     console.error("Error streaming chat response:", error);
     throw new Error("Failed to stream AI response");

@@ -1,0 +1,70 @@
+.typingIndicator {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.typingContent {
+  background-color: var(--assistant-message-bg);
+  color: var(--assistant-message-text);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.typingRole {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.75rem;
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.typingDots {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--secondary-color);
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

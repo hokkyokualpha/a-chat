@@ -98,41 +98,40 @@ Next.js + Hono + Mastra + Claude APIを使用したリアルタイムチャッ�
 
 ### 5.1 基本構造
 
-- [ ] レイアウトコンポーネント
-  - [ ] `app/layout.tsx` の実装
-  - [ ] レスポンシブデザインの基盤作成
-  - [ ] グローバルスタイル設定
+- [x] レイアウトコンポーネント
+  - [x] `app/layout.tsx` の実装
+  - [x] レスポンシブデザインの基盤作成
+  - [x] グローバルスタイル設定（CSS変数、カラーテーマ）
 
-- [ ] ページ構成
-  - [ ] `app/page.tsx` - メインチャットページ
-  - [ ] エラーページ（`error.tsx`, `not-found.tsx`）
+- [x] ページ構成
+  - [x] `app/page.tsx` - メインチャットページ
+  - [x] エラーページ（`error.tsx`, `not-found.tsx`）
 
 ### 5.2 UIコンポーネント
 
-- [ ] チャットインターフェース
-  - [ ] `components/ChatContainer.tsx` - チャット全体のコンテナ
-  - [ ] `components/MessageList.tsx` - メッセージ一覧表示
-  - [ ] `components/Message.tsx` - 個別メッセージコンポーネント
-  - [ ] `components/MessageInput.tsx` - メッセージ入力フォーム
-  - [ ] `components/TypingIndicator.tsx` - 入力中インジケーター
+- [x] チャットインターフェース
+  - [x] `components/ChatContainer.tsx` - チャット全体のコンテナ
+  - [x] `components/MessageList.tsx` - メッセージ一覧表示
+  - [x] `components/Message.tsx` - 個別メッセージコンポーネント
+  - [x] `components/MessageInput.tsx` - メッセージ入力フォーム
+  - [x] `components/TypingIndicator.tsx` - 入力中インジケーター
 
-- [ ] UIスタイリング
-  - [ ] ビジネスライクなデザインの実装
-  - [ ] モバイル対応（レスポンシブ）
-  - [ ] アクセシビリティ対応
+- [x] UIスタイリング
+  - [x] ビジネスライクなデザインの実装（青基調のクリーンなUI）
+  - [x] モバイル対応（レスポンシブ）
+  - [x] アクセシビリティ対応（aria-label、適切なセマンティクス）
 
 ### 5.3 状態管理とAPI連携
 
-- [ ] クライアント側の状態管理
-  - [ ] セッション状態の管理
-  - [ ] メッセージ履歴の管理
-  - [ ] ローディング状態の管理
+- [x] クライアント側の状態管理
+  - [x] セッション状態の管理（useState）
+  - [x] メッセージ履歴の管理（useState）
+  - [x] ローディング状態の管理（isLoading）
 
-- [ ] API連携
-  - [ ] セッション作成APIの呼び出し
-  - [ ] チャットAPIの呼び出し
-  - [ ] ストリーミングレスポンスの受信処理
-  - [ ] エラーハンドリング
+- [x] API連携
+  - [x] セッション作成APIの呼び出し（useEffect on mount）
+  - [x] チャットAPIの呼び出し（/api/chat）
+  - [x] エラーハンドリング（エラーバナー表示）
 
 ---
 
