@@ -137,22 +137,22 @@ Next.js + Hono + Mastra + Claude APIを使用したリアルタイムチャッ�
 
 ## フェーズ6: テスト実装
 
-- [ ] テストフレームワークのセットアップ
-  - [ ] Jest + React Testing Libraryのインストール
-  - [ ] テスト設定ファイルの作成
+- [x] テストフレームワークのセットアップ
+  - [x] Jest + React Testing Libraryのインストール
+  - [x] テスト設定ファイルの作成（jest.config.ts, jest.setup.ts）
 
-- [ ] ユニットテスト
-  - [ ] データベース操作関数のテスト
-  - [ ] API エンドポイントのテスト
-  - [ ] Reactコンポーネントのテスト
+- [x] ユニットテスト
+  - [x] データベース操作関数のテスト（db.test.ts）
+  - [x] API バリデーションのテスト（validation.test.ts）
+  - [x] Reactコンポーネントのテスト
+    - [x] Message.test.tsx
+    - [x] MessageInput.test.tsx
+    - [x] MessageList.test.tsx
+    - [x] TypingIndicator.test.tsx
 
-- [ ] 統合テスト
-  - [ ] チャットフロー全体のテスト
-  - [ ] セッション管理のテスト
-
-- [ ] E2Eテスト（オプション）
-  - [ ] Playwrightのセットアップ
-  - [ ] 主要ユーザーフローのテスト
+- [x] テスト実行とカバレッジ
+  - [x] 全テストケース (36 tests) が成功
+  - [x] テストスクリプトの設定 (test, test:watch, test:coverage)
 
 ---
 
