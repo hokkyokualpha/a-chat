@@ -10,6 +10,7 @@ import {
   getMessagesBySession,
   isSessionExpired,
 } from "@/lib/db";
+import { generateChatResponse, streamChatResponse } from "@/lib/agent";
 
 const app = new Hono().basePath("/api");
 
@@ -112,7 +113,7 @@ app.get("/messages/:sessionId", async (c) => {
   }
 });
 
-// Chat endpoint (placeholder - will be implemented in Phase 4)
+// Chat endpoint with AI integration
 const chatSchema = z.object({
   sessionId: z.string(),
   message: z.string().min(1),
@@ -131,9 +132,19 @@ app.post("/chat", zValidator("json", chatSchema), async (c) => {
     // Save user message
     await createMessage(sessionId, "user", message);
 
-    // TODO: Phase 4 - Integrate with Mastra/Claude API for AI response
-    // For now, return a placeholder response
-    const aiResponse = "AI integration will be implemented in Phase 4";
+    // Get conversation history for context
+    const messages = await getMessagesBySession(sessionId);
+    const conversationHistory = messages
+      .slice(0, -1) // Exclude the just-saved user message
+      .map((msg) => ({
+        role: msg.role as "user" | "assistant",
+        content: msg.content,
+      }));
+
+    // Generate AI response with context
+    const aiResponse = await generateChatResponse(message, conversationHistory);
+
+    // Save AI response
     await createMessage(sessionId, "assistant", aiResponse);
 
     return c.json({
@@ -143,6 +154,74 @@ app.post("/chat", zValidator("json", chatSchema), async (c) => {
   } catch (error) {
     console.error("Error in chat endpoint:", error);
     return c.json({ error: "Failed to process chat message" }, 500);
+  }
+});
+
+// Streaming chat endpoint
+app.post("/chat/stream", zValidator("json", chatSchema), async (c) => {
+  try {
+    const { sessionId, message } = c.req.valid("json");
+
+    // Check if session exists and is not expired
+    const expired = await isSessionExpired(sessionId);
+    if (expired) {
+      return c.json({ error: "Session not found or expired" }, 404);
+    }
+
+    // Save user message
+    await createMessage(sessionId, "user", message);
+
+    // Get conversation history for context
+    const messages = await getMessagesBySession(sessionId);
+    const conversationHistory = messages
+      .slice(0, -1) // Exclude the just-saved user message
+      .map((msg) => ({
+        role: msg.role as "user" | "assistant",
+        content: msg.content,
+      }));
+
+    // Create streaming response
+    const stream = await streamChatResponse(message, conversationHistory);
+
+    // Collect full response for saving
+    let fullResponse = "";
+
+    // Create a ReadableStream for SSE
+    const encoder = new TextEncoder();
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            fullResponse += chunk;
+            // Send as Server-Sent Events format
+            const data = `data: ${JSON.stringify({ chunk })}\n\n`;
+            controller.enqueue(encoder.encode(data));
+          }
+
+          // Save the complete AI response
+          await createMessage(sessionId, "assistant", fullResponse);
+
+          // Send completion event
+          const doneData = `data: ${JSON.stringify({ done: true })}\n\n`;
+          controller.enqueue(encoder.encode(doneData));
+          controller.close();
+        } catch (error) {
+          console.error("Error in stream:", error);
+          controller.error(error);
+        }
+      },
+    });
+
+    return new Response(readableStream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      },
+    });
+  } catch (error) {
+    console.error("Error in streaming chat endpoint:", error);
+    return c.json({ error: "Failed to process streaming chat message" }, 500);
   }
 });
 

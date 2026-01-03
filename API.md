@@ -108,7 +108,7 @@ Get all messages for a session.
 
 **POST** `/chat`
 
-Send a message and get an AI response.
+Send a message and get an AI response from Claude.
 
 **Request Body:**
 ```json
@@ -136,6 +136,60 @@ Send a message and get an AI response.
 - `sessionId` - Required, must be a valid MongoDB ObjectId
 - `message` - Required, must be at least 1 character
 
+**Notes:**
+- The AI uses conversation history from the session for context
+- Responses are generated using Claude 3.5 Sonnet via Mastra
+
+---
+
+#### Send Message (Streaming)
+
+**POST** `/chat/stream`
+
+Send a message and receive an AI response as a Server-Sent Events (SSE) stream.
+
+**Request Body:**
+```json
+{
+  "sessionId": "507f1f77bcf86cd799439011",
+  "message": "Tell me a story"
+}
+```
+
+**Response:**
+Stream of Server-Sent Events:
+```
+data: {"chunk":"Once"}
+
+data: {"chunk":" upon"}
+
+data: {"chunk":" a"}
+
+data: {"chunk":" time"}
+
+...
+
+data: {"done":true}
+
+```
+
+**Status Codes:**
+- `200` - Success (streaming)
+- `400` - Invalid request body
+- `404` - Session not found or expired
+- `500` - Server error
+
+**Response Headers:**
+- `Content-Type: text/event-stream`
+- `Cache-Control: no-cache`
+- `Connection: keep-alive`
+
+**Notes:**
+- The response is streamed in real-time as the AI generates it
+- Each chunk is sent as a separate SSE event
+- The complete response is saved to the database after streaming completes
+- A final event with `{"done": true}` indicates the stream has ended
+
 ---
 
 ## Error Responses
@@ -154,8 +208,10 @@ All endpoints may return error responses in the following format:
 
 - Sessions expire after 24 hours by default
 - All timestamps are in ISO 8601 format
-- The chat endpoint currently returns a placeholder response (Phase 4 will integrate actual AI)
+- AI responses are powered by Claude 3.5 Sonnet via Mastra framework
+- The AI maintains conversation context within each session
 - CORS is enabled for `http://localhost:3000`
+- Requires `ANTHROPIC_API_KEY` environment variable to be set
 
 ---
 
