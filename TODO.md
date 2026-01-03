@@ -58,21 +58,21 @@ Next.js + Hono + Mastra + Claude APIを使用したリアルタイムチャッ�
 
 ## フェーズ3: バックエンドAPI実装（Hono）
 
-- [ ] Honoサーバーのセットアップ
-  - [ ] `app/api/[[...route]]/route.ts` でHonoをマウント
-  - [ ] CORS設定
+- [x] Honoサーバーのセットアップ
+  - [x] `app/api/[[...route]]/route.ts` でHonoをマウント
+  - [x] CORS設定
 
-- [ ] APIエンドポイントの実装
-  - [ ] `POST /api/sessions` - 新規セッション作成
-  - [ ] `GET /api/sessions/:id` - セッション取得
-  - [ ] `POST /api/chat` - チャットメッセージ送信
-  - [ ] `GET /api/messages/:sessionId` - メッセージ履歴取得
-  - [ ] エラーハンドリングミドルウェア
+- [x] APIエンドポイントの実装
+  - [x] `POST /api/sessions` - 新規セッション作成
+  - [x] `GET /api/sessions/:id` - セッション取得
+  - [x] `POST /api/chat` - チャットメッセージ送信（Phase 4でAI統合予定）
+  - [x] `GET /api/messages/:sessionId` - メッセージ履歴取得
+  - [x] エラーハンドリングミドルウェア
 
-- [ ] セッション管理ロジック
-  - [ ] インメモリセッションストア（必要に応じて）
-  - [ ] セッションタイムアウト処理
-  - [ ] セッションクリーンアップ処理
+- [x] セッション管理ロジック
+  - [x] データベースベースのセッション管理（Phase 2で実装済み）
+  - [x] セッションタイムアウト処理
+  - [x] セッションクリーンアップ処理
 
 ---
 
