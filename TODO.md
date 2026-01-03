@@ -7,30 +7,30 @@ Next.js + Hono + Mastra + Claude APIを使用したリアルタイムチャッ�
 
 ## フェーズ1: プロジェクト初期化とセットアップ
 
-- [ ] Gitリポジトリの初期化
-  - [ ] `git init`
-  - [ ] `.gitignore` ファイルの作成
-  - [ ] 初期コミット
+- [x] Gitリポジトリの初期化
+  - [x] `git init`
+  - [x] `.gitignore` ファイルの作成
+  - [x] 初期コミット
 
-- [ ] Next.jsプロジェクトのセットアップ
-  - [ ] `npx create-next-app@latest` の実行
-  - [ ] TypeScript設定の確認・調整
-  - [ ] App Routerの有効化確認
+- [x] Next.jsプロジェクトのセットアップ
+  - [x] `npx create-next-app@latest` の実行
+  - [x] TypeScript設定の確認・調整
+  - [x] App Routerの有効化確認
 
-- [ ] 依存関係のインストール
-  - [ ] Next.js関連パッケージ
-  - [ ] Hono (`hono`)
-  - [ ] Prisma (`prisma`, `@prisma/client`)
-  - [ ] Mastra (`@mastra/core` など)
-  - [ ] Anthropic Claude SDK (`@anthropic-ai/sdk`)
-  - [ ] MongoDB用ドライバー
-  - [ ] その他必要なユーティリティ（zod, dotenvなど）
+- [x] 依存関係のインストール
+  - [x] Next.js関連パッケージ
+  - [x] Hono (`hono`)
+  - [x] Prisma (`prisma`, `@prisma/client`)
+  - [x] Mastra (`@mastra/core` など)
+  - [x] Anthropic Claude SDK (`@ai-sdk/anthropic`)
+  - [x] MongoDB用ドライバー
+  - [x] その他必要なユーティリティ（zod, ai など）
 
-- [ ] 開発環境の設定
-  - [ ] `.env.local` ファイルの作成
-  - [ ] 環境変数の定義（CLAUDE_API_KEY, MONGODB_URLなど）
-  - [ ] `tsconfig.json` の最適化
-  - [ ] ESLint/Prettier の設定
+- [x] 開発環境の設定
+  - [x] `.env.example` ファイルの作成
+  - [x] 環境変数の定義（ANTHROPIC_API_KEY, MONGODB_URLなど）
+  - [x] `tsconfig.json` の最適化
+  - [x] ESLint/Prettier の設定
 
 ---
 
