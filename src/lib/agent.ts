@@ -13,11 +13,14 @@ Your role is to:
 Keep the conversation natural and engaging.`;
 
 // Create the chat agent with Google Gemini 1.5 Flash (most cost-effective model)
+// Note: Mastra uses @ai-sdk/google
+// Environment variable: GOOGLE_GENERATIVE_AI_API_KEY
+// Try different model name formats if one doesn't work
 export const chatAgent = new Agent({
   id: "chat-assistant",
   name: "Chat Assistant",
   instructions: SYSTEM_PROMPT,
-  model: "google/gemini-1.5-flash",
+  model: "google/gemini-1.5-flash-latest", // Try with -latest suffix
 });
 
 // Helper function to generate a response with conversation history
@@ -46,7 +49,9 @@ export async function generateChatResponse(
     return response.text || "I apologize, but I couldn't generate a response. Please try again.";
   } catch (error) {
     console.error("Error generating chat response:", error);
-    throw new Error("Failed to generate AI response");
+    console.error("Error details:", error instanceof Error ? error.message : String(error));
+    console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace");
+    throw new Error(`Failed to generate AI response: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
