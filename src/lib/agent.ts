@@ -12,12 +12,12 @@ Your role is to:
 
 Keep the conversation natural and engaging.`;
 
-// Create the chat agent with Claude 3.5 Sonnet
+// Create the chat agent with Google Gemini 1.5 Flash (most cost-effective model)
 export const chatAgent = new Agent({
   id: "chat-assistant",
   name: "Chat Assistant",
   instructions: SYSTEM_PROMPT,
-  model: "anthropic/claude-3-5-sonnet-20241022",
+  model: "google/gemini-1.5-flash",
 });
 
 // Helper function to generate a response with conversation history

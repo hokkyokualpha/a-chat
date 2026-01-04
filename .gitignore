@@ -51,3 +51,4 @@ prisma/dev.db-journal
 .claude/
 
 /src/generated/prisma
+github-actions-key.json

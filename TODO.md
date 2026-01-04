@@ -29,6 +29,7 @@ Next.js + Hono + Mastra + Claude APIを使用したリアルタイムチャッ�
 - [x] 開発環境の設定
   - [x] `.env.example` ファイルの作成
   - [x] 環境変数の定義（ANTHROPIC_API_KEY, MONGODB_URLなど）
+  - [ ] **注意**: 本番環境（GCP Cloud Run）では、Anthropic API のAPIキーをGCP Consoleから環境変数として設定する必要があります
   - [x] `tsconfig.json` の最適化
   - [x] ESLint/Prettier の設定
 
@@ -158,43 +159,95 @@ Next.js + Hono + Mastra + Claude APIを使用したリアルタイムチャッ�
 
 ## フェーズ7: デプロイメント準備
 
-- [ ] 環境設定
-  - [ ] 本番環境用の環境変数設定
+- [x] 環境設定
+  - [x] 本番環境用の環境変数設定
+  - [ ] **重要**: Anthropic API のAPIキーをGCP Consoleから環境変数として設定
+    - [ ] GCP Console > Cloud Run > サービス設定 > 環境変数タブ
+    - [ ] `ANTHROPIC_API_KEY` を環境変数として追加
   - [ ] MongoDB Atlas等のクラウドDBセットアップ
 
-- [ ] ビルド最適化
-  - [ ] `next.config.js` の最適化
-  - [ ] 不要なパッケージの削除
-  - [ ] バンドルサイズの確認
+- [x] ビルド最適化
+  - [x] `next.config.ts` の最適化
+  - [x] 不要なパッケージの削除
+  - [x] バンドルサイズの確認
 
-- [ ] GCP Cloud Runデプロイ設定
-  - [ ] `Dockerfile` の作成
-  - [ ] `.dockerignore` の作成
-  - [ ] Cloud Run用の設定ファイル
-  - [ ] ビルド・デプロイスクリプト
+- [x] GCP Cloud Runデプロイ設定
+  - [x] `Dockerfile` の作成
+  - [x] `.dockerignore` の作成
+  - [x] Cloud Run用の設定ファイル（cloudbuild.yaml）
+  - [x] ビルド・デプロイスクリプト（deploy.sh）
 
-- [ ] デプロイメント
-  - [ ] イメージのビルド
-  - [ ] Cloud Runへのデプロイ
-  - [ ] デプロイ後の動作確認
+- [x] デプロイメント準備
+  - [x] イメージのビルドテスト（ローカルビルド成功）
+  - [x] Cloud Runへのデプロイ（完了）
+  - [x] デプロイ後の動作確認（完了）
+  - [ ] **次のステップ**: Anthropic API KeyをGCP Consoleから設定
+
+- [x] GitHub ActionsによるCI/CD実装
+  - [x] `.github/workflows/deploy.yml` の作成（自動デプロイワークフロー）
+  - [x] `.github/workflows/ci.yml` の作成（CIワークフロー）
+  - [ ] GCPサービスアカウントの作成と権限設定（ユーザーが実行）
+  - [ ] GitHub Secretsに`GCP_SA_KEY`を設定（ユーザーが実行）
+  - [ ] Secret Managerにシークレットが存在することを確認（ユーザーが実行）
 
 ---
 
 ## フェーズ8: ドキュメント作成
 
-- [ ] README.md の作成
-  - [ ] プロジェクト概要
-  - [ ] セットアップ手順
-  - [ ] 開発方法
-  - [ ] デプロイ方法
+- [x] README.md の更新
+  - [x] プロジェクト概要
+  - [x] セットアップ手順
+  - [x] 開発方法
+  - [x] デプロイ方法
+  - [x] 開発ステータスの更新
+  - [x] テストスクリプトの追加
+  - [x] ドキュメントリンクの追加
 
-- [ ] API ドキュメント
-  - [ ] エンドポイント一覧
-  - [ ] リクエスト/レスポンス形式
+- [x] API ドキュメントの拡充
+  - [x] エンドポイント一覧
+  - [x] リクエスト/レスポンス形式
+  - [x] JavaScript/TypeScript使用例
+  - [x] React使用例
+  - [x] Python使用例
+  - [x] ストリーミングチャット例
+  - [x] エラーハンドリング例
+  - [x] ベストプラクティス
 
-- [ ] アーキテクチャドキュメント
-  - [ ] システム構成図
-  - [ ] データフロー図
+- [x] ARCHITECTURE.md の作成
+  - [x] システム構成図
+  - [x] データフロー図
+  - [x] コンポーネント設計
+  - [x] データベース設計
+  - [x] セキュリティ設計
+  - [x] パフォーマンス最適化
+  - [x] スケーラビリティ
+
+- [x] DEPLOYMENT.md の作成
+  - [x] Google Cloud Run デプロイ手順
+  - [x] Vercel デプロイ手順
+  - [x] その他プラットフォーム
+  - [x] Dockerfile 設定
+  - [x] 環境変数管理
+  - [x] CI/CD 設定
+  - [x] トラブルシューティング
+
+- [x] DEVELOPMENT.md の作成
+  - [x] 開発環境セットアップ
+  - [x] プロジェクト構造
+  - [x] 開発ワークフロー
+  - [x] コーディング規約
+  - [x] テスト開発
+  - [x] デバッグ方法
+  - [x] ベストプラクティス
+
+- [x] CONTRIBUTING.md の作成
+  - [x] 行動規範
+  - [x] 開発プロセス
+  - [x] プルリクエストガイドライン
+  - [x] コーディング規約
+  - [x] テスト規約
+  - [x] コミットメッセージ規約
+  - [x] Issue作成ガイド
 
 ---
 

@@ -12,7 +12,7 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^3.0.2",
+    "@ai-sdk/google": "^3.0.2",
     "@hono/zod-validator": "^0.7.6",
     "@mastra/core": "^0.24.9",
     "@prisma/client": "^6.19.1",

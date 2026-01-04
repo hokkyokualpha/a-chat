@@ -1,10 +1,10 @@
 # A-Chat
 
-リアルタイムAIチャットアプリケーション - Next.js + Hono + Mastra + Claude API
+リアルタイムAIチャットアプリケーション - Next.js + Hono + Mastra + Google Gemini API
 
 ## 概要
 
-A-Chatは、Claude 3.5 Sonnetを使用したエンタメ性の高い会話型Webアプリケーションです。セッションベースの会話履歴管理により、自然な対話体験を提供します。
+A-Chatは、Google Gemini 1.5 Flashを使用したエンタメ性の高い会話型Webアプリケーションです。セッションベースの会話履歴管理により、自然な対話体験を提供します。
 
 ## 技術スタック
 
@@ -13,19 +13,22 @@ A-Chatは、Claude 3.5 Sonnetを使用したエンタメ性の高い会話型Web
 - **ORM**: Prisma
 - **データベース**: MongoDB
 - **AIフレームワーク**: Mastra
-- **AIモデル**: Claude 3.5 Sonnet (Anthropic)
+- **AIモデル**: Google Gemini 1.5 Flash
 - **言語**: TypeScript
 - **デプロイ**: Google Cloud Platform (Cloud Run)
 
 ## 主要機能
 
-- ✅ Claude 3.5 Sonnetによるリアルタイムチャット
+- ✅ Google Gemini 1.5 Flashによるリアルタイムチャット
 - ✅ セッションベースの会話履歴管理
 - ✅ コンテキストを保持した自然な対話
-- ✅ ストリーミングレスポンス対応
-- ✅ RESTful API
-- ⏳ レスポンシブUI（実装予定）
-- ⏳ モバイル対応（実装予定）
+- ✅ ストリーミングレスポンス対応（SSE）
+- ✅ RESTful API（Hono）
+- ✅ レスポンシブUI（モバイル・タブレット・デスクトップ対応）
+- ✅ モダンなUIデザイン（CSS Modules）
+- ✅ 包括的なテスト（Jest + React Testing Library）
+- ✅ TypeScript による型安全性
+- ✅ エラーハンドリングとバリデーション
 
 ## セットアップ
 
@@ -33,7 +36,7 @@ A-Chatは、Claude 3.5 Sonnetを使用したエンタメ性の高い会話型Web
 
 - Node.js 20以上
 - MongoDB（ローカルまたはMongoDB Atlas）
-- Anthropic API Key
+- Google Generative AI API Key (Gemini)
 
 ### インストール
 
@@ -61,8 +64,9 @@ cp .env.example .env.local
 `.env.local`を編集：
 
 ```env
-# Anthropic Claude API Key
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
+# Google Generative AI API Key (for Gemini)
+# 取得先: https://aistudio.google.com/app/apikey
+GOOGLE_GENERATIVE_AI_API_KEY=your_api_key_here
 
 # MongoDB Connection URL
 DATABASE_URL=mongodb://localhost:27017/a-chat
@@ -141,6 +145,9 @@ a-chat/
 - `npm run build` - プロダクションビルド
 - `npm start` - プロダクションサーバー起動
 - `npm run lint` - ESLint実行
+- `npm test` - テスト実行
+- `npm run test:watch` - テストウォッチモード
+- `npm run test:coverage` - テストカバレッジレポート生成
 - `npx prisma generate` - Prismaクライアント生成
 - `npx prisma studio` - Prisma Studio起動（データベースGUI）
 
@@ -158,6 +165,19 @@ curl http://localhost:3000/api/health
 
 ### Google Cloud Run
 
+#### 自動デプロイ（GitHub Actions推奨）
+
+`main`ブランチにプッシュすると、GitHub Actionsが自動でテスト、ビルド、デプロイを実行します。
+
+**必要な設定:**
+1. GCPサービスアカウントの作成と権限設定
+2. GitHub Secretsに`GCP_SA_KEY`を設定
+3. Secret Managerに`anthropic-api-key`と`database-url`を作成
+
+詳細は [DEPLOYMENT.md](./DEPLOYMENT.md) の「GitHub Actions を使用した自動デプロイ」セクションを参照してください。
+
+#### 手動デプロイ
+
 1. Dockerイメージのビルド
 
 ```bash
@@ -173,6 +193,8 @@ gcloud run deploy a-chat \
   --region asia-northeast1 \
   --set-env-vars ANTHROPIC_API_KEY=xxx,DATABASE_URL=xxx
 ```
+
+詳細は [DEPLOYMENT.md](./DEPLOYMENT.md) を参照してください。
 
 ## アーキテクチャ
 
@@ -208,9 +230,19 @@ MIT
 - ✅ フェーズ2: データベース設計と実装
 - ✅ フェーズ3: バックエンドAPI実装
 - ✅ フェーズ4: AI統合（Mastra + Claude API）
-- ⏳ フェーズ5: フロントエンド実装
-- ⏳ フェーズ6: テスト実装
-- ⏳ フェーズ7: デプロイメント準備
-- ⏳ フェーズ8: ドキュメント作成
+- ✅ フェーズ5: フロントエンド実装
+- ✅ フェーズ6: テスト実装
+- 🔄 フェーズ7: デプロイメント準備
+- 🔄 フェーズ8: ドキュメント作成
 
 進捗の詳細は [TODO.md](./TODO.md) を参照してください。
+
+## ドキュメント
+
+- [API.md](./API.md) - API仕様書
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - アーキテクチャ設計
+- [DEVELOPMENT.md](./DEVELOPMENT.md) - 開発ガイド
+- [DEPLOYMENT.md](./DEPLOYMENT.md) - デプロイガイド
+- [CONTRIBUTING.md](./CONTRIBUTING.md) - コントリビューションガイド
+- [TESTING.md](./TESTING.md) - テストガイド
+- [TODO.md](./TODO.md) - プロジェクトTODOリスト

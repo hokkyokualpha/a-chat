@@ -12,8 +12,8 @@ Webアプリケーション
 ## 技術スタック
 
 ### AIモデル・サービス
-- **Claude** を使用
-- **Claudeモデル**: claude-4-sonnet
+- **Google Gemini** を使用
+- **Geminiモデル**: gemini-1.5-flash (最もコスト効率の良いモデル)
 
 ### フロントエンド・バックエンド
 - **Next.js App Router** を使用
@@ -41,7 +41,7 @@ Webアプリケーション
 - Honoを使用したAPIルーティング
 - Prisma.jsでMongoDBへのデータアクセスを管理
 - MastraでAIエージェント機能を実装
-- Claude APIを使用した対話機能を提供
+- Google Gemini APIを使用した対話機能を提供
 
 ### データベース設計
 - 会話履歴の保存：セッション中のみ（永続化不要）
