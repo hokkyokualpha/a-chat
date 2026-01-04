@@ -18,7 +18,11 @@ const app = new Hono().basePath("/api");
 app.use(
   "/*",
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [
+      "http://localhost:3000",
+      "https://a-chat-uo57ppsmja-an.a.run.app",
+      "https://a-chat-173601101972.asia-northeast1.run.app",
+    ],
     credentials: true,
   })
 );
@@ -44,7 +48,10 @@ app.get("/health", (c) => {
 // Create new session
 app.post("/sessions", async (c) => {
   try {
+    console.log("Attempting to create session...");
+    console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
     const session = await createSession();
+    console.log("Session created successfully:", session.id);
     return c.json(
       {
         sessionId: session.id,
@@ -54,7 +61,12 @@ app.post("/sessions", async (c) => {
     );
   } catch (error) {
     console.error("Error creating session:", error);
-    return c.json({ error: "Failed to create session" }, 500);
+    console.error("Error details:", error instanceof Error ? error.message : String(error));
+    console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace");
+    return c.json({ 
+      error: "Failed to create session",
+      details: error instanceof Error ? error.message : String(error)
+    }, 500);
   }
 });
 
