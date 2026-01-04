@@ -20,7 +20,7 @@ describe("MessageInput Component", () => {
     await user.type(textarea, "Hello");
     await user.click(screen.getByLabelText("送信"));
 
-    expect(mockOnSend).toHaveBeenCalledWith("Hello");
+    expect(mockOnSend).toHaveBeenCalledWith("Hello", undefined);
     expect(mockOnSend).toHaveBeenCalledTimes(1);
   });
 
@@ -55,7 +55,7 @@ describe("MessageInput Component", () => {
     await user.type(textarea, "  Hello  ");
     await user.click(screen.getByLabelText("送信"));
 
-    expect(mockOnSend).toHaveBeenCalledWith("Hello");
+    expect(mockOnSend).toHaveBeenCalledWith("Hello", undefined);
   });
 
   it("sends message on Enter key press", async () => {
@@ -66,7 +66,7 @@ describe("MessageInput Component", () => {
     const textarea = screen.getByPlaceholderText(/メッセージを入力/);
     await user.type(textarea, "Hello{Enter}");
 
-    expect(mockOnSend).toHaveBeenCalledWith("Hello");
+    expect(mockOnSend).toHaveBeenCalledWith("Hello", undefined);
   });
 
   it("does not send message on Shift+Enter", async () => {
