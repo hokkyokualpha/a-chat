@@ -61,16 +61,26 @@ export async function cleanupExpiredSessions(): Promise<number> {
 
 // Message operations
 
+export interface CreateMessageOptions {
+  imageData?: string;
+  imageMimeType?: string;
+  imageSize?: number;
+}
+
 export async function createMessage(
   sessionId: string,
   role: "user" | "assistant",
-  content: string
+  content: string,
+  options?: CreateMessageOptions
 ): Promise<Message> {
   return await prisma.message.create({
     data: {
       sessionId,
       role,
       content,
+      imageData: options?.imageData,
+      imageMimeType: options?.imageMimeType,
+      imageSize: options?.imageSize,
     },
   });
 }

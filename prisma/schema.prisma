@@ -29,5 +29,10 @@ model Message {
   content   String
   timestamp DateTime @default(now())
 
+  // Image attachment support (optional fields)
+  imageData String?  // Base64 encoded image data
+  imageMimeType String? // MIME type (e.g., "image/jpeg", "image/png")
+  imageSize Int?     // Size in bytes
+
   @@index([sessionId])
 }

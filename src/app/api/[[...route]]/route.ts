@@ -10,7 +10,8 @@ import {
   getMessagesBySession,
   isSessionExpired,
 } from "@/lib/db";
-import { generateChatResponse, streamChatResponse } from "@/lib/agent";
+import { generateChatResponse, streamChatResponse, generateMultimodalResponse } from "@/lib/agent";
+import { validateImage, parseBase64Image } from "@/lib/imageValidation";
 
 const app = new Hono().basePath("/api");
 
@@ -117,6 +118,9 @@ app.get("/messages/:sessionId", async (c) => {
         role: msg.role,
         content: msg.content,
         timestamp: msg.timestamp.toISOString(),
+        imageData: msg.imageData || undefined,
+        imageMimeType: msg.imageMimeType || undefined,
+        imageSize: msg.imageSize || undefined,
       })),
     });
   } catch (error) {
@@ -125,15 +129,16 @@ app.get("/messages/:sessionId", async (c) => {
   }
 });
 
-// Chat endpoint with AI integration
+// Chat endpoint with AI integration (with multimodal support)
 const chatSchema = z.object({
   sessionId: z.string(),
   message: z.string().min(1),
+  imageData: z.string().optional(), // Base64 data URL for image attachment
 });
 
 app.post("/chat", zValidator("json", chatSchema), async (c) => {
   try {
-    const { sessionId, message } = c.req.valid("json");
+    const { sessionId, message, imageData } = c.req.valid("json");
 
     // Check if session exists and is not expired
     const expired = await isSessionExpired(sessionId);
@@ -141,8 +146,25 @@ app.post("/chat", zValidator("json", chatSchema), async (c) => {
       return c.json({ error: "Session not found or expired" }, 404);
     }
 
-    // Save user message
-    await createMessage(sessionId, "user", message);
+    // Validate image if provided
+    let imageMetadata;
+    if (imageData) {
+      const validation = validateImage(imageData);
+      if (!validation.valid) {
+        return c.json({ error: validation.error }, 400);
+      }
+      imageMetadata = parseBase64Image(imageData);
+      if (!imageMetadata) {
+        return c.json({ error: "Failed to parse image data" }, 400);
+      }
+    }
+
+    // Save user message with optional image
+    await createMessage(sessionId, "user", message, imageData ? {
+      imageData,
+      imageMimeType: imageMetadata!.mimeType,
+      imageSize: imageMetadata!.size,
+    } : undefined);
 
     // Get conversation history for context
     const messages = await getMessagesBySession(sessionId);
@@ -151,10 +173,18 @@ app.post("/chat", zValidator("json", chatSchema), async (c) => {
       .map((msg) => ({
         role: msg.role as "user" | "assistant",
         content: msg.content,
+        imageData: msg.imageData || undefined,
       }));
 
-    // Generate AI response with context
-    const aiResponse = await generateChatResponse(message, conversationHistory);
+    // Generate AI response with context (use multimodal if image present)
+    let aiResponse: string;
+    if (imageData || conversationHistory.some(msg => msg.imageData)) {
+      // Use multimodal endpoint if current or any past message has an image
+      aiResponse = await generateMultimodalResponse(message, imageData, conversationHistory);
+    } else {
+      // Use standard text-only endpoint
+      aiResponse = await generateChatResponse(message, conversationHistory);
+    }
 
     // Save AI response
     await createMessage(sessionId, "assistant", aiResponse);

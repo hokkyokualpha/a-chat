@@ -35,7 +35,7 @@ export default function ChatContainer() {
     }
   };
 
-  const sendMessage = async (content: string) => {
+  const sendMessage = async (content: string, imageData?: string) => {
     if (!sessionId) {
       setError("セッションが作成されていません。");
       return;
@@ -46,6 +46,7 @@ export default function ChatContainer() {
       role: "user",
       content,
       timestamp: new Date().toISOString(),
+      imageData,
     };
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
@@ -60,6 +61,7 @@ export default function ChatContainer() {
         body: JSON.stringify({
           sessionId,
           message: content,
+          imageData,
         }),
       });
 

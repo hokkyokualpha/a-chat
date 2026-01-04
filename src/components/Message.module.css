@@ -59,6 +59,20 @@
   font-size: 0.7rem;
 }
 
+.messageImage {
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.messageImage img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
 .messageText {
   line-height: 1.5;
   word-wrap: break-word;
