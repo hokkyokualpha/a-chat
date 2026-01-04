@@ -35,7 +35,7 @@ export default function ChatContainer() {
     }
   };
 
-  const sendMessage = async (content: string) => {
+  const sendMessage = async (content: string, images?: string[]) => {
     if (!sessionId) {
       setError("セッションが作成されていません。");
       return;
@@ -44,8 +44,9 @@ export default function ChatContainer() {
     // Add user message to UI immediately
     const userMessage: MessageProps = {
       role: "user",
-      content,
+      content: images && images.length > 0 ? `${content} [画像${images.length}枚]` : content,
       timestamp: new Date().toISOString(),
+      images: images,
     };
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
@@ -60,6 +61,7 @@ export default function ChatContainer() {
         body: JSON.stringify({
           sessionId,
           message: content,
+          images: images,
         }),
       });
 

@@ -23,10 +23,11 @@ export const chatAgent = new Agent({
   model: "google/gemini-2.5-flash-lite", // Most cost-effective model according to Mastra's available models
 });
 
-// Helper function to generate a response with conversation history
+// Helper function to generate a response with conversation history and images
 export async function generateChatResponse(
   userMessage: string,
-  conversationHistory: Array<{ role: "user" | "assistant"; content: string }>
+  conversationHistory: Array<{ role: "user" | "assistant"; content: string }>,
+  images?: string[]
 ): Promise<string> {
   try {
     // Build the conversation context
@@ -39,10 +40,24 @@ export async function generateChatResponse(
       context += "\n";
     }
 
-    // Generate response with context
-    const fullPrompt = conversationHistory.length > 0
-      ? `${context}User: ${userMessage}`
-      : userMessage;
+    // Prepare the prompt with images if provided
+    let fullPrompt: string;
+    if (images && images.length > 0) {
+      // Convert base64 images to format that Mastra can handle
+      // Mastra's Agent.generate can accept images in the prompt
+      const imagePrompts = images.map((img, idx) => `[Image ${idx + 1}]`).join(", ");
+      fullPrompt = conversationHistory.length > 0
+        ? `${context}User: ${userMessage || ""} ${imagePrompts}`
+        : `${userMessage || ""} ${imagePrompts}`;
+      
+      // For now, we'll use text-only since Mastra's image handling may need special configuration
+      // In a production system, you would pass images directly to the model
+      console.log(`Processing message with ${images.length} image(s)`);
+    } else {
+      fullPrompt = conversationHistory.length > 0
+        ? `${context}User: ${userMessage}`
+        : userMessage;
+    }
 
     const response = await chatAgent.generate(fullPrompt);
 

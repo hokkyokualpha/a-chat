@@ -128,12 +128,13 @@ app.get("/messages/:sessionId", async (c) => {
 // Chat endpoint with AI integration
 const chatSchema = z.object({
   sessionId: z.string(),
-  message: z.string().min(1),
+  message: z.string().min(1).optional(),
+  images: z.array(z.string()).optional(),
 });
 
 app.post("/chat", zValidator("json", chatSchema), async (c) => {
   try {
-    const { sessionId, message } = c.req.valid("json");
+    const { sessionId, message, images } = c.req.valid("json");
 
     // Check if session exists and is not expired
     const expired = await isSessionExpired(sessionId);
@@ -141,8 +142,14 @@ app.post("/chat", zValidator("json", chatSchema), async (c) => {
       return c.json({ error: "Session not found or expired" }, 404);
     }
 
-    // Save user message
-    await createMessage(sessionId, "user", message);
+    // Validate that either message or images are provided
+    if (!message && (!images || images.length === 0)) {
+      return c.json({ error: "Message or images are required" }, 400);
+    }
+
+    // Save user message (include image count if images are present)
+    const messageText = message || (images && images.length > 0 ? `[画像${images.length}枚]` : "");
+    await createMessage(sessionId, "user", messageText);
 
     // Get conversation history for context
     const messages = await getMessagesBySession(sessionId);
@@ -153,8 +160,8 @@ app.post("/chat", zValidator("json", chatSchema), async (c) => {
         content: msg.content,
       }));
 
-    // Generate AI response with context
-    const aiResponse = await generateChatResponse(message, conversationHistory);
+    // Generate AI response with context and images
+    const aiResponse = await generateChatResponse(message || "", conversationHistory, images);
 
     // Save AI response
     await createMessage(sessionId, "assistant", aiResponse);
