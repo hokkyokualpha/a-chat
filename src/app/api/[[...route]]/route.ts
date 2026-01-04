@@ -206,7 +206,8 @@ app.post("/chat/stream", zValidator("json", chatSchema), async (c) => {
       }));
 
     // Create streaming response
-    const stream = await streamChatResponse(message, conversationHistory);
+    const messageText = message || (images && images.length > 0 ? "この画像について説明してください" : "");
+    const stream = await streamChatResponse(messageText || "", conversationHistory);
 
     // Collect full response for saving
     let fullResponse = "";
