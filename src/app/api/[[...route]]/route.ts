@@ -149,7 +149,7 @@ app.post("/chat", zValidator("json", chatSchema), async (c) => {
 
     // Save user message (include image count if images are present)
     const messageText = message || (images && images.length > 0 ? `[画像${images.length}枚]` : "");
-    await createMessage(sessionId, "user", messageText);
+    await createMessage(sessionId, "user", messageText || "");
 
     // Get conversation history for context
     const messages = await getMessagesBySession(sessionId);
@@ -161,7 +161,7 @@ app.post("/chat", zValidator("json", chatSchema), async (c) => {
       }));
 
     // Generate AI response with context and images
-    const aiResponse = await generateChatResponse(message || "", conversationHistory, images);
+    const aiResponse = await generateChatResponse(message || (images && images.length > 0 ? "この画像について説明してください" : ""), conversationHistory, images);
 
     // Save AI response
     await createMessage(sessionId, "assistant", aiResponse);
@@ -179,7 +179,7 @@ app.post("/chat", zValidator("json", chatSchema), async (c) => {
 // Streaming chat endpoint
 app.post("/chat/stream", zValidator("json", chatSchema), async (c) => {
   try {
-    const { sessionId, message } = c.req.valid("json");
+    const { sessionId, message, images } = c.req.valid("json");
 
     // Check if session exists and is not expired
     const expired = await isSessionExpired(sessionId);
@@ -187,8 +187,14 @@ app.post("/chat/stream", zValidator("json", chatSchema), async (c) => {
       return c.json({ error: "Session not found or expired" }, 404);
     }
 
+    // Validate that either message or images are provided
+    if (!message && (!images || images.length === 0)) {
+      return c.json({ error: "Message or images are required" }, 400);
+    }
+
     // Save user message
-    await createMessage(sessionId, "user", message);
+    const messageText = message || (images && images.length > 0 ? `[画像${images.length}枚]` : "");
+    await createMessage(sessionId, "user", messageText || "");
 
     // Get conversation history for context
     const messages = await getMessagesBySession(sessionId);
