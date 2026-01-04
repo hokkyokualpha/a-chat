@@ -12,15 +12,15 @@ Your role is to:
 
 Keep the conversation natural and engaging.`;
 
-// Create the chat agent with Google Gemini 1.5 Flash (most cost-effective model)
+// Create the chat agent with Google Gemini 2.5 Flash Lite (most cost-effective model)
 // Note: Mastra uses @ai-sdk/google
 // Environment variable: GOOGLE_GENERATIVE_AI_API_KEY
-// Try different model name formats if one doesn't work
+// Available models from Mastra: gemini-2.5-flash-lite (cheapest), gemini-2.5-flash, gemini-1.5-flash
 export const chatAgent = new Agent({
   id: "chat-assistant",
   name: "Chat Assistant",
   instructions: SYSTEM_PROMPT,
-  model: "google/gemini-1.5-flash-latest", // Try with -latest suffix
+  model: "google/gemini-2.5-flash-lite", // Most cost-effective model according to Mastra's available models
 });
 
 // Helper function to generate a response with conversation history
