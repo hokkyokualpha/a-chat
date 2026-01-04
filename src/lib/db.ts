@@ -4,14 +4,25 @@ import type { Message, Session } from "@prisma/client";
 // Session operations
 
 export async function createSession(expiresInHours: number = 24): Promise<Session> {
-  const expiresAt = new Date();
-  expiresAt.setHours(expiresAt.getHours() + expiresInHours);
+  try {
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + expiresInHours);
 
-  return await prisma.session.create({
-    data: {
-      expiresAt,
-    },
-  });
+    return await prisma.session.create({
+      data: {
+        expiresAt,
+      },
+    });
+  } catch (error) {
+    console.error("Database error in createSession:", error);
+    if (error instanceof Error) {
+      // Check for connection errors
+      if (error.message.includes("DNS resolution") || error.message.includes("connection")) {
+        throw new Error(`Database connection failed: ${error.message}. Please check DATABASE_URL and MongoDB Atlas network access settings.`);
+      }
+    }
+    throw error;
+  }
 }
 
 export async function getSession(sessionId: string): Promise<Session | null> {
